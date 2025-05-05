@@ -126,7 +126,7 @@ def type_dict_schema(  # noqa: C901
         schema = None
         fr_arg = None
         if type(field_type) == ForwardRef:
-            fr_arg = field_type.__forward_arg__
+            fr_arg = field_type if isinstance(field_type, str) else field_type.__forward_arg__
 
             fr_arg, matched = re.subn(r'Required\[(.+)]', r'\1', fr_arg)
             if matched:
@@ -170,7 +170,7 @@ def type_dict_schema(  # noqa: C901
                     defined_ser_schema = True
                     definitions['ser-schema'] = tagged_union(schema, 'type', 'ser-schema')
                     schema = {'type': 'definition-ref', 'schema_ref': 'ser-schema'}
-            elif fr_arg.endswith('SerSchema'):
+            elif fr_arg and fr_arg.endswith('SerSchema'):
                 schema = tagged_union(schema, 'type')
 
         # now_utc_offset is an int that must be in the range -24 hours to +24 hours, we manually add a constraint here
@@ -209,7 +209,7 @@ def main() -> None:
     choices = {}
     for s in schema_union.__args__:
         type_ = s.__annotations__['type']
-        m = re.search(r"Literal\['(.+?)']", type_.__forward_arg__)
+        m = re.search(r"Literal\['(.+?)']", type_ if isinstance(type_, str) else type_.__forward_arg__)
         assert m, f'Unknown schema type: {type_}'
         key = m.group(1)
         value = get_schema(s, definitions)

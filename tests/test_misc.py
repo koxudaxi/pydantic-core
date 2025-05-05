@@ -161,7 +161,7 @@ def test_validation_error_multiple(pydantic_version):
 def test_core_schema_type_literal():
     def get_type_value(schema):
         type_ = schema.__annotations__['type']
-        m = re.search(r"Literal\['(.+?)']", type_.__forward_arg__)
+        m = re.search(r"Literal\['(.+?)']", type_ if isinstance(type_) else type_.__forward_arg__)
         assert m, f'Unknown schema type: {type_}'
         return m.group(1)
 

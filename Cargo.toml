@@ -29,7 +29,7 @@ rust-version = "1.75"
 [dependencies]
 # TODO it would be very nice to remove the "py-clone" feature as it can panic,
 # but needs a bit of work to make sure it's not used in the codebase
-pyo3 = { version = "0.24", features = ["generate-import-lib", "num-bigint", "py-clone"] }
+pyo3 = { workspace = true, features = ["generate-import-lib", "num-bigint", "py-clone"] }
 regex = "1.11.1"
 strum = { version = "0.26.3", features = ["derive"] }
 strum_macros = "0.26.4"
@@ -46,7 +46,7 @@ base64 = "0.22.1"
 num-bigint = "0.4.6"
 num-traits = "0.2.19"
 uuid = "1.16.0"
-jiter = { version = "0.9.0", features = ["python"] }
+jiter = { workspace = true, features = ["python"] }
 hex = "0.4.3"
 
 [lib]
@@ -74,12 +74,12 @@ debug = true
 strip = false
 
 [dev-dependencies]
-pyo3 = { version = "0.24", features = ["auto-initialize"] }
+pyo3 = { workspace = true, features = ["auto-initialize"] }
 
 [build-dependencies]
 version_check = "0.9.5"
 # used where logic has to be version/distribution specific, e.g. pypy
-pyo3-build-config = { version = "0.24" }
+pyo3-build-config = { workspace = true }
 
 [lints.clippy]
 dbg_macro = "warn"
@@ -111,3 +111,15 @@ too_many_lines = "allow"
 unnecessary_wraps = "allow"
 unused_self = "allow"
 used_underscore_binding = "allow"
+
+
+[workspace.dependencies]
+pyo3 = { git = "https://github.com/PyO3/pyo3", rev = "c25577f76490a843965393a52cecdc7b224c6040" }
+pyo3-build-config = { git = "https://github.com/PyO3/pyo3", rev = "c25577f76490a843965393a52cecdc7b224c6040" }
+jiter = { git = "https://github.com/koxudaxi/jiter", branch = "support-python3.14" }
+
+[patch.crates-io]
+pyo3             = { git = "https://github.com/PyO3/pyo3", rev = "c25577f76490a843965393a52cecdc7b224c6040" }
+pyo3-build-config = { git = "https://github.com/PyO3/pyo3", rev = "c25577f76490a843965393a52cecdc7b224c6040" }
+pyo3-ffi         = { git = "https://github.com/PyO3/pyo3", rev = "c25577f76490a843965393a52cecdc7b224c6040" }
+jiter            = { git = "https://github.com/koxudaxi/jiter", branch = "support-python3.14" }

@@ -333,7 +333,7 @@ def test_schema_functions(function, args_kwargs, expected_schema):
 
 def test_all_schema_functions_used():
     all_types = {
-        re.sub(r".+'(.+?)'.+", r'\1', s.__annotations__['type'].__forward_arg__)
+        re.sub(r".+'(.+?)'.+", r'\1', s.__annotations__['type'] if isinstance(s.__annotations__['type']) else s.__annotations__['type'].__forward_arg__)
         for s in core_schema.CoreSchema.__args__
     }
     types_used = {args['type'] for _, _, args in all_schema_functions if 'type' in args}
